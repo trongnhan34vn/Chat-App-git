@@ -4,15 +4,24 @@ import Conversation from '../components/Main/Conversation';
 import { AppDispatch } from '../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAll } from '../thunk/userThunk';
-import { roomSelector, userSelector } from '../redux/selectors';
+import { userSelector } from '../redux/selectors';
+import { useNavigate } from 'react-router-dom';
 
 const MainLayout = () => {
+  const navigate = useNavigate()
   const dispatch: AppDispatch = useDispatch();
   const userLocal = localStorage.getItem('user');
   const currentUser = userLocal ? JSON.parse(userLocal) : null;
 
   useEffect(() => {
     dispatch(findAll())
+  },[])
+
+  useEffect(() => {
+    console.log(currentUser);
+    if(!currentUser) {
+      navigate('/auth')
+    }
   },[])
 
   const users = useSelector(userSelector).users;

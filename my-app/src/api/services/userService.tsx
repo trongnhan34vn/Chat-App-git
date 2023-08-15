@@ -15,3 +15,8 @@ export const FIND_ALL = async () => {
   let response = await instance.get('/users');
   return response;
 };
+
+export const FIND_BY_ID = async (id: number) => {
+  let response = await instance.get('/users/' + id);
+  return response;
+}

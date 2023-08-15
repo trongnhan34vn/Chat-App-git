@@ -9,10 +9,12 @@ import { getCurrentUser } from '../../utils/user/getCurrentUser';
 import { useDispatch, useSelector } from 'react-redux';
 import { roomSelector } from '../../redux/selectors';
 import { getReceiver } from '../../utils/user/getReceiver';
-import { IChat, IChatMessage } from '../../types/Chat.type';
+import { IChatMessage } from '../../types/Chat.type';
 import { AppDispatch } from '../../redux/store';
-import { getRoomResult } from '../../redux/reducers/roomSlice';
 import { scrollToBottom } from '../../utils/scroll/scrollToBottom';
+import { createRoom, findCurrentUserRooms, updateRoom } from '../../thunk/roomThunk';
+import { useParams } from 'react-router-dom';
+import { getRoomResult } from '../../redux/reducers/roomSlice';
 
 let stompClient: Stomp.Client | null = null;
 const Conversation = () => {
@@ -23,7 +25,20 @@ const Conversation = () => {
 
   useEffect(() => {
     if (!currentUser) return;
+    dispatch(findCurrentUserRooms(currentUser.id));
     connect();
+  }, []);
+
+  const { receiverId } = useParams();
+
+  useEffect(() => {
+    if (!receiverId) return;
+    dispatch(
+      createRoom({
+        receiverId: +receiverId,
+        userId: currentUser.id,
+      })
+    );
   }, []);
 
   const connect = () => {
@@ -50,8 +65,7 @@ const Conversation = () => {
 
   const onPrivateMessageReceived = (payload: any) => {
     let receivedValue = JSON.parse(payload.body);
-    console.log(receivedValue);
-    dispatch(getRoomResult(receivedValue));
+    dispatch(updateRoom(receivedValue));
   };
 
   const onSendMessage = (content: string) => {
@@ -74,17 +88,30 @@ const Conversation = () => {
 
   useEffect(() => {
     scrollToBottom(messageRef);
-  },[room])
+  }, [room]);
 
   return (
-    <div className="w-2/3 border bg-[#F4F7F9] flex flex-col">
-      {/* Header */}
-      <Header />
-      {/* Messages */}
-      <Messages messageRef={messageRef} sender={currentUser} receiver={receiver} room={room} />
-      {/* Input */}
-      <FormMessage onSendMessage={onSendMessage} />
-    </div>
+    <>
+      {room ? (
+        <div className="w-2/3 border bg-[#F4F7F9] flex flex-col">
+          {/* Header */}
+          <Header room={room} />
+          {/* Messages */}
+          <Messages
+            messageRef={messageRef}
+            sender={currentUser}
+            receiver={receiver}
+            room={room}
+          />
+          {/* Input */}
+          <FormMessage onSendMessage={onSendMessage} />
+        </div>
+      ) : (
+        <div className='bg-[#F4F7F9] w-full flex items-center justify-center'>
+          <h2 className='text-[24px] font-semibold text-[#65676B]'>Hãy chọn một đoạn chat</h2>
+        </div>
+      )}
+    </>
   );
 };
 

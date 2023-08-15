@@ -1,13 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { roomSelector } from '../../../redux/selectors';
 import { getCurrentUser } from '../../../utils/user/getCurrentUser';
 import { getReceiver } from '../../../utils/user/getReceiver';
+import { IRoom } from '../../../types/Room.type';
 
-const Header = () => {
-  const roomResult = useSelector(roomSelector).roomResult;
+interface HeaderProps {
+  room: IRoom | null;
+}
 
-  const members = roomResult ? roomResult.users : [];
+const Header = ({ room }: HeaderProps) => {
+  const members = room ? room.users : [];
   const receiver = getReceiver(getCurrentUser(), members);
 
   return (

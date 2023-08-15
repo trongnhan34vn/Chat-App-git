@@ -1,19 +1,32 @@
 import React from 'react';
 import { IUser } from '../../../types/User.type';
 import { Popover, Transition } from '@headlessui/react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../redux/store';
+import { resetRoomResult } from '../../../redux/reducers/roomSlice';
 
 interface HeaderProps {
   currentUser: IUser;
 }
 
 const Header = ({ currentUser }: HeaderProps) => {
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  const handleSignOut = () => {
+    localStorage.removeItem('user');
+    navigate('/auth');
+    dispatch(resetRoomResult());
+  };
+
   return (
     <div className="py-2 px-3 flex flex-row justify-between items-center">
       <div className="flex items-center">
-        <img className="w-10 h-10 rounded-full mr-2" src={currentUser.image} />
+        <img className="w-10 h-10 rounded-full mr-2" src={currentUser?.image} />
         <div className="">
-          <p>{currentUser.name}</p>
-          <p className="text-[12px]">{currentUser.email}</p>
+          <p>{currentUser?.name}</p>
+          <p className="text-[12px]">{currentUser?.email}</p>
         </div>
       </div>
       <div className="flex">
@@ -44,7 +57,7 @@ const Header = ({ currentUser }: HeaderProps) => {
             />
           </svg>
         </div>
-        <Popover className='relative'>
+        <Popover className="relative">
           <Popover.Button className="ml-4 outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +80,15 @@ const Header = ({ currentUser }: HeaderProps) => {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Popover.Panel className='absolute'>
-
+            <Popover.Panel className="absolute top-full right-0">
+              <div className="bg-[#F2F2F2] hover:bg-[#fff] w-[100px] transition-all ease-in duration-100 shadow-xl rounded-[3px]">
+                <div
+                  onClick={handleSignOut}
+                  className="py-2 px-3 cursor-pointer"
+                >
+                  <span className="text-[14px] text-red-500">Sign out</span>
+                </div>
+              </div>
             </Popover.Panel>
           </Transition>
         </Popover>

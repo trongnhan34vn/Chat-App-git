@@ -8,6 +8,7 @@ import com.demo.repository.IRoomRepository;
 import com.demo.repository.IUserRepository;
 import com.demo.service.IChatService;
 import com.demo.service.IRoomService;
+import com.demo.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +72,27 @@ public class RoomServiceIMPL implements IRoomService {
         System.out.println(room.getChats());
         save(room);
         return room;
+    }
+
+    @Override
+    public Room findRoomByUserReceiver(Long userId, Long receiverId) {
+        Optional<User> currentUser = userRepository.findById(userId);
+        Optional<User> receiver = userRepository.findById(receiverId);
+
+        if (!currentUser.isPresent()) {
+            return null;
+        }
+        if (!receiver.isPresent()) {
+            return null;
+        }
+
+        List<Room> rooms = findAll();
+        for (Room room : rooms) {
+            List<User> users = room.getUsers();
+            if (users.contains(currentUser.get()) && users.contains(receiver.get())) {
+                return room;
+            }
+        }
+        return null;
     }
 }

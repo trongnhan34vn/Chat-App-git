@@ -17,12 +17,14 @@ export interface UserProps {
   registryResult: IRegistryResponse | null;
   loginResult: ILoginResponse | null;
   users: IUser[];
+  selectUser: IUser | null;
 }
 
 const initialState: UserProps = {
   registryResult: null,
   loginResult: null,
   users: [],
+  selectUser: null
 };
 
 const userSlice = createSlice({
@@ -44,6 +46,9 @@ const userSlice = createSlice({
     getAll: (state, action: PayloadAction<IUser[]>) => {
       state.users = action.payload;
     },
+    getUserById: (state, action: PayloadAction<IUser>) => {
+      state.selectUser = action.payload;
+    },
   },
 });
 
@@ -54,4 +59,5 @@ export const {
   resetLogin,
   resetRegistry,
   getAll,
+  getUserById
 } = userSlice.actions;

@@ -8,4 +8,5 @@ import java.util.List;
 public interface IRoomService extends IGenericService<Room>{
     List<Room> findRoomsByUserId(long userId);
     Room saveChat(ChatMessage chatMessage);
+    Room findRoomByUserReceiver(Long userId, Long receiverId);
 }

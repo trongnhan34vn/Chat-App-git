@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.demo.dto.request.RoomForm;
-import com.demo.dto.response.ResponseMessage;
+
 import com.demo.model.Room;
 import com.demo.model.User;
 import com.demo.service.IRoomService;
@@ -50,5 +50,17 @@ public class RoomController {
         roomService.save(justAddRoom);
 
         return ResponseEntity.status(HttpStatus.OK).body(ResponseMessBuilder.successMessage("Create Room Success!", justAddRoom));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> findRoomsByUserId(@RequestParam Long userId) {
+        List<Room> rooms = roomService.findRoomsByUserId(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(rooms);
+    }
+
+    @GetMapping("/user-receiver")
+    public ResponseEntity<?> findRoomByUserReceiver(@RequestParam Long userId, @RequestParam Long receiverId) {
+        Room room = roomService.findRoomByUserReceiver(userId, receiverId);
+        return ResponseEntity.status(HttpStatus.OK).body(room);
     }
 }

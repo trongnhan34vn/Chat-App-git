@@ -22,4 +22,10 @@ public class UserController {
         List<User> users = userService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> findById(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
 }
