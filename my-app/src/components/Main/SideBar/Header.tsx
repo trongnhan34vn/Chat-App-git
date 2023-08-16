@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store';
 import { resetRoomResult } from '../../../redux/reducers/roomSlice';
+import { resetSelectUser } from '../../../redux/reducers/userSlice';
 
 interface HeaderProps {
   currentUser: IUser;
@@ -18,6 +19,7 @@ const Header = ({ currentUser }: HeaderProps) => {
     localStorage.removeItem('user');
     navigate('/auth');
     dispatch(resetRoomResult());
+    dispatch(resetSelectUser());
   };
 
   return (

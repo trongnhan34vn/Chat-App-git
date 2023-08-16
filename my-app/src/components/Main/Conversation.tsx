@@ -14,7 +14,6 @@ import { AppDispatch } from '../../redux/store';
 import { scrollToBottom } from '../../utils/scroll/scrollToBottom';
 import { createRoom, findCurrentUserRooms, updateRoom } from '../../thunk/roomThunk';
 import { useParams } from 'react-router-dom';
-import { getRoomResult } from '../../redux/reducers/roomSlice';
 
 let stompClient: Stomp.Client | null = null;
 const Conversation = () => {

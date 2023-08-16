@@ -49,6 +49,9 @@ const userSlice = createSlice({
     getUserById: (state, action: PayloadAction<IUser>) => {
       state.selectUser = action.payload;
     },
+    resetSelectUser: (state) => {
+      state.selectUser = null;
+    }
   },
 });
 
@@ -59,5 +62,6 @@ export const {
   resetLogin,
   resetRegistry,
   getAll,
-  getUserById
+  getUserById,
+  resetSelectUser
 } = userSlice.actions;
